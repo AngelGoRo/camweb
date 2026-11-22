@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       MiniWebServer.h
+* @file       CamWeb.h
 * 
-* @class      MINIWEBSERVER
-* @brief      Example Mini Web Server class
+* @class      CAMWEB
+* @brief      Example CamWeb class
 * @ingroup    EXAMPLES
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -39,37 +39,37 @@
 
 #include "APPFlowConsole.h"
 
-#include "MiniWebServer_APIRest.h"
-#include "MiniWebServer_TranslateID.h"
+#include "CamWeb_APIRest.h"
+#include "CamWeb_TranslateID.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-enum MINIWEBSERVERXFSMEVENTS
+enum CAMWEBXFSMEVENTS
 {
-  MINIWEBSERVER_XFSMEVENT_NONE                  = 0 ,
-  MINIWEBSERVER_XFSMEVENT_INI                       ,
-  MINIWEBSERVER_XFSMEVENT_END                       ,
+  CAMWEB_XFSMEVENT_NONE                  = 0 ,
+  CAMWEB_XFSMEVENT_INI                       ,
+  CAMWEB_XFSMEVENT_END                       ,
 
-  MINIWEBSERVER_LASTEVENT
+  CAMWEB_LASTEVENT
 };
 
 
-enum MINIWEBSERVERXFSMSTATES
+enum CAMWEBXFSMSTATES
 {
-  MINIWEBSERVER_XFSMSTATE_NONE                  = 0 ,
-  MINIWEBSERVER_XFSMSTATE_INI                       ,
-  MINIWEBSERVER_XFSMSTATE_END                       ,
+  CAMWEB_XFSMSTATE_NONE                  = 0 ,
+  CAMWEB_XFSMSTATE_INI                       ,
+  CAMWEB_XFSMSTATE_END                       ,
 
-  MINIWEBSERVER_LASTSTATE
+  CAMWEB_LASTSTATE
 };
 
 
-enum MINIWEBSERVERTASKID
+enum CAMWEBTASKID
 {
-  MINIWEBSERVER_TASKID_UNKNOWN                  = 0 ,
-  MINIWEBSERVER_TASKID_CHECKMEMORYSTATUS
+  CAMWEB_TASKID_UNKNOWN                  = 0 ,
+  CAMWEB_TASKID_CHECKMEMORYSTATUS
 };
 
 
@@ -77,9 +77,9 @@ enum MINIWEBSERVERTASKID
 #define APPLICATION_SUBVERSION                    1
 #define APPLICATION_SUBVERSIONERR                 0
 
-#define APPLICATION_NAMEAPP                       NL("Mini Web Server")
-#define APPLICATION_NAMEFILE                      NL("miniwebserver")
-#define MINIWEBSERVER_LNG_NAMEFILE                NL("miniwebserver")
+#define APPLICATION_NAMEAPP                       NL("CamWeb")
+#define APPLICATION_NAMEFILE                      NL("camweb")
+#define CAMWEB_LNG_NAMEFILE                NL("camweb")
 
 #define APPLICATION_OWNER                         NL("EndoraSoft")
 
@@ -100,11 +100,11 @@ class DIOWEBSERVER_XEVENT;
 class APPFLOWINTERNETSERVICES;
 class APPFLOWWEBSERVER;
 
-class MINIWEBSERVER : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHINE
+class CAMWEB : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHINE
 {
   public:
-                                    MINIWEBSERVER                           ();
-    virtual                        ~MINIWEBSERVER                           ();
+                                    CAMWEB                           ();
+    virtual                        ~CAMWEB                           ();
 
     bool                            InitFSMachine                           ();
 
@@ -131,7 +131,7 @@ class MINIWEBSERVER : public APPFLOWCONSOLE, public XOBSERVER, public XFSMACHINE
     XMUTEX*                         xmutexshowallstatus;
 
     APPFLOWWEBSERVER*               appwebserver;
-    MINIWEBSERVER_APIREST*          apirest;
+    CAMWEB_APIREST*          apirest;
     APPFLOWWEBSERVER*               appwebsocket;
 };
 

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       MiniWebServer.cpp
+* @file       CamWeb.cpp
 * 
-* @class      MINIWEBSERVER
-* @brief      Example Mini Web Server class
+* @class      CAMWEB
+* @brief      Example CamWeb class
 * @ingroup    EXAMPLES
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -34,7 +34,7 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "MiniWebServer.h"
+#include "CamWeb.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -93,7 +93,7 @@
 #include "APPFlowWebServer.h"
 #include "APPFlowExtended.h"
 
-#include "MiniWebServer_CFG.h"
+#include "CamWeb_CFG.h"
 
 
 
@@ -106,7 +106,7 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-APPLICATIONCREATEINSTANCE(MINIWEBSERVER, miniwebserver)
+APPLICATIONCREATEINSTANCE(CAMWEB, camweb)
 
 
 
@@ -115,14 +115,14 @@ APPLICATIONCREATEINSTANCE(MINIWEBSERVER, miniwebserver)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER::MINIWEBSERVER()
+* @fn         CAMWEB::CAMWEB()
 * @brief      Constructor.
 * @ingroup    EXAMPLES
 *
 * @return     Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER::MINIWEBSERVER() :  XFSMACHINE(0)
+CAMWEB::CAMWEB() :  XFSMACHINE(0)
 {
   Clean();
 }
@@ -130,7 +130,7 @@ MINIWEBSERVER::MINIWEBSERVER() :  XFSMACHINE(0)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER::~MINIWEBSERVER()
+* @fn         CAMWEB::~CAMWEB()
 * @brief      Destructor.
 * @note       VIRTUAL
 * @ingroup    EXAMPLES
@@ -138,7 +138,7 @@ MINIWEBSERVER::MINIWEBSERVER() :  XFSMACHINE(0)
 * @return     Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER::~MINIWEBSERVER()
+CAMWEB::~CAMWEB()
 {
   Clean();
 }
@@ -146,30 +146,30 @@ MINIWEBSERVER::~MINIWEBSERVER()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::InitFSMachine()
+* @fn         bool CAMWEB::InitFSMachine()
 * @brief      Initializes the finite state machine.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::InitFSMachine()
+bool CAMWEB::InitFSMachine()
 {
-  if(!AddState( MINIWEBSERVER_XFSMSTATE_NONE            ,
-                MINIWEBSERVER_XFSMEVENT_INI             , MINIWEBSERVER_XFSMSTATE_INI           ,
-                MINIWEBSERVER_XFSMEVENT_END             , MINIWEBSERVER_XFSMSTATE_END           ,
+  if(!AddState( CAMWEB_XFSMSTATE_NONE            ,
+                CAMWEB_XFSMEVENT_INI             , CAMWEB_XFSMSTATE_INI           ,
+                CAMWEB_XFSMEVENT_END             , CAMWEB_XFSMSTATE_END           ,
                 XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-  if(!AddState( MINIWEBSERVER_XFSMSTATE_INI             ,
-                MINIWEBSERVER_XFSMEVENT_NONE            , MINIWEBSERVER_XFSMSTATE_NONE          ,
-                MINIWEBSERVER_XFSMEVENT_END             , MINIWEBSERVER_XFSMSTATE_END           ,
+  if(!AddState( CAMWEB_XFSMSTATE_INI             ,
+                CAMWEB_XFSMEVENT_NONE            , CAMWEB_XFSMSTATE_NONE          ,
+                CAMWEB_XFSMEVENT_END             , CAMWEB_XFSMSTATE_END           ,
                 XFSMACHINESTATE_EVENTDEFEND)) return false;
 
 
-  if(!AddState( MINIWEBSERVER_XFSMSTATE_END             ,
-                MINIWEBSERVER_XFSMEVENT_NONE            , MINIWEBSERVER_XFSMSTATE_NONE          ,
-                MINIWEBSERVER_XFSMEVENT_INI             , MINIWEBSERVER_XFSMSTATE_INI           ,
+  if(!AddState( CAMWEB_XFSMSTATE_END             ,
+                CAMWEB_XFSMEVENT_NONE            , CAMWEB_XFSMSTATE_NONE          ,
+                CAMWEB_XFSMEVENT_INI             , CAMWEB_XFSMSTATE_INI           ,
                 XFSMACHINESTATE_EVENTDEFEND)) return false;
 
   return true;
@@ -178,14 +178,14 @@ bool MINIWEBSERVER::InitFSMachine()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::AppProc_Ini()
+* @fn         bool CAMWEB::AppProc_Ini()
 * @brief      Initializes the application process.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::AppProc_Ini()
+bool CAMWEB::AppProc_Ini()
 {
   XSTRING string;
   XSTRING stringresult;
@@ -234,7 +234,7 @@ bool MINIWEBSERVER::AppProc_Ini()
   //--------------------------------------------------------------------------------------------------
 
   GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathsection);
-  xpath.Create(3 , xpathsection.Get(), MINIWEBSERVER_LNG_NAMEFILE, XTRANSLATION_NAMEFILEEXT);
+  xpath.Create(3 , xpathsection.Get(), CAMWEB_LNG_NAMEFILE, XTRANSLATION_NAMEFILEEXT);
 
   if(!GEN_XTRANSLATION.Ini(xpath))
     {
@@ -247,7 +247,7 @@ bool MINIWEBSERVER::AppProc_Ini()
 
   //--------------------------------------------------------------------------------------------------
 
-  SetEvent(MINIWEBSERVER_XFSMEVENT_INI);
+  SetEvent(CAMWEB_XFSMEVENT_INI);
 
   return true;
 }
@@ -255,14 +255,14 @@ bool MINIWEBSERVER::AppProc_Ini()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::AppProc_FirstUpdate()
+* @fn         bool CAMWEB::AppProc_FirstUpdate()
 * @brief      Executes the first application update.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::AppProc_FirstUpdate()
+bool CAMWEB::AppProc_FirstUpdate()
 {
   XSTRING string;   
   XSTRING string2;
@@ -280,7 +280,7 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
 
   if(APPFLOW_CFG.WebServer_GetPort())
     {
-      string2.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_INITIALIZING_WEB_SERVER));
+      string2.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_INITIALIZING_WEB_SERVER));
       
       #ifdef DIO_STREAMTLS_ACTIVE
       string2.AddFormat(NL(" %s"), (APPFLOW_CFG.WebServer_IsTLS()?NL(" (TLS)"):NL("")));     
@@ -295,7 +295,7 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
 
       if(status) status = appwebserver->Ini(&APPFLOW_CFG, true, false, false);
 
-      stringresult = (status)?TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_OK):TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ERROR);
+      stringresult = (status)?TL(CAMWEB_TRANSLATEID_CAMWEB_OK):TL(CAMWEB_TRANSLATEID_CAMWEB_ERROR);
       console->PrintMessage(stringresult.Get(), 0, false, true);
 
       if(status)
@@ -305,7 +305,7 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
           SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_CHECKAUTHENTICATE, (XSUBJECT *)appwebserver);
           SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST_ENDPOINT, (XSUBJECT *)appwebserver);
 
-          apirest = GEN_NEW MINIWEBSERVER_APIREST(this);
+          apirest = GEN_NEW CAMWEB_APIREST(this);
           if(!apirest) return false;
         }
 
@@ -316,7 +316,7 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
 
   status = false;
 
-  string2.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_INITIALIZING_WEB_SOCKET));
+  string2.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_INITIALIZING_WEB_SOCKET));
       
   #ifdef DIO_STREAMTLS_ACTIVE
   string2.AddFormat(NL(" %s"), (APPFLOW_CFG.WebServer_IsTLS()?NL(" (WSS)"):NL("")));     
@@ -331,7 +331,7 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
 
   if(status) status = appwebsocket->Ini(&APPFLOW_CFG, 17009, APPFLOW_CFG.WebServer_GetTimeoutToServerPage(), APPFLOW_CFG.WebServer_GetLocalAddress());
 
-  stringresult = (status)?TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_OK):TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ERROR);
+  stringresult = (status)?TL(CAMWEB_TRANSLATEID_CAMWEB_OK):TL(CAMWEB_TRANSLATEID_CAMWEB_ERROR);
   console->PrintMessage(stringresult.Get(), 0, false, true);
 
   if(status)
@@ -347,7 +347,7 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
   APPFLOW_LOG_ENTRY((status)?XLOGLEVEL_INFO:XLOGLEVEL_ERROR, APPFLOW_CFG_LOG_SECTIONID_INITIATION, false, NL("%s: %s") , string.Get(), stringresult.Get());
 
   console->PrintMessage(NL(" "), 0, false, true);
-  console->WaitKey(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PRESS_A_KEY_TO_CONTINUE), 1, false, 5);
+  console->WaitKey(TL(CAMWEB_TRANSLATEID_CAMWEB_PRESS_A_KEY_TO_CONTINUE), 1, false, 5);
 
   //--------------------------------------------------------------------------------------------------
 
@@ -357,22 +357,22 @@ bool MINIWEBSERVER::AppProc_FirstUpdate()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::AppProc_Update()
+* @fn         bool CAMWEB::AppProc_Update()
 * @brief      Executes the application update cycle.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::AppProc_Update()
+bool CAMWEB::AppProc_Update()
 {
-  if(GetEvent()==MINIWEBSERVER_XFSMEVENT_NONE) // Not GEN_NEW event
+  if(GetEvent()==CAMWEB_XFSMEVENT_NONE) // Not GEN_NEW event
     {
       switch(GetCurrentState())
         {
-          case MINIWEBSERVER_XFSMSTATE_NONE       : break;
+          case CAMWEB_XFSMSTATE_NONE       : break;
 
-          case MINIWEBSERVER_XFSMSTATE_INI        : if(GetExitType() == APPFLOWBASE_EXITTYPE_UNKNOWN)
+          case CAMWEB_XFSMSTATE_INI        : if(GetExitType() == APPFLOWBASE_EXITTYPE_UNKNOWN)
                                                       {
                                                         if(xtimerupdateconsole)
                                                           {
@@ -391,23 +391,23 @@ bool MINIWEBSERVER::AppProc_Update()
                                                     }
                                                     break;
 
-          case MINIWEBSERVER_XFSMSTATE_END        : break;
+          case CAMWEB_XFSMSTATE_END        : break;
 
         }
     }
    else //  New event
     {
-      if(GetEvent()<MINIWEBSERVER_LASTEVENT)
+      if(GetEvent()<CAMWEB_LASTEVENT)
         {
           CheckTransition();
 
           switch(GetCurrentState())
             {
-              case MINIWEBSERVER_XFSMSTATE_NONE   : break;
+              case CAMWEB_XFSMSTATE_NONE   : break;
 
-              case MINIWEBSERVER_XFSMSTATE_INI    : break;
+              case CAMWEB_XFSMSTATE_INI    : break;
 
-              case MINIWEBSERVER_XFSMSTATE_END    : break;
+              case CAMWEB_XFSMSTATE_END    : break;
             }
         }
     }
@@ -418,21 +418,21 @@ bool MINIWEBSERVER::AppProc_Update()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::AppProc_End()
+* @fn         bool CAMWEB::AppProc_End()
 * @brief      Ends the application process.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::AppProc_End()
+bool CAMWEB::AppProc_End()
 {
   XSTRING string;
   XSTRING stringresult;
 
   //--------------------------------------------------------------------------------------
 
-  SetEvent(MINIWEBSERVER_XFSMEVENT_END);
+  SetEvent(CAMWEB_XFSMEVENT_END);
 
   //--------------------------------------------------------------------------------------
 
@@ -454,7 +454,7 @@ bool MINIWEBSERVER::AppProc_End()
 
   if(appwebserver)
     {
-      string.Format(APPFLOWCONSOLE_DEFAULT_MESSAGEMASK, TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_DEACTIVATING_WEB_SERVER));
+      string.Format(APPFLOWCONSOLE_DEFAULT_MESSAGEMASK, TL(CAMWEB_TRANSLATEID_CAMWEB_DEACTIVATING_WEB_SERVER));
       console->PrintMessage(string.Get(), 1, true, false);
 
       UnSubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST, (XSUBJECT *)appwebserver);
@@ -465,7 +465,7 @@ bool MINIWEBSERVER::AppProc_End()
       delete appwebserver;
       appwebserver = NULL;
 
-      stringresult = TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_OK);
+      stringresult = TL(CAMWEB_TRANSLATEID_CAMWEB_OK);
 
       console->PrintMessage(stringresult.Get(), 0, false, true);
       XLOG::GetInstance().AddEntry(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_ENDING, false, NL("%s: %s") , string.Get(), stringresult.Get());
@@ -481,7 +481,7 @@ bool MINIWEBSERVER::AppProc_End()
 
   if(appwebsocket)
     {
-      string.Format(APPFLOWCONSOLE_DEFAULT_MESSAGEMASK, TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_DEACTIVATING_WEBSOCKET));
+      string.Format(APPFLOWCONSOLE_DEFAULT_MESSAGEMASK, TL(CAMWEB_TRANSLATEID_CAMWEB_DEACTIVATING_WEBSOCKET));
       console->PrintMessage(string.Get(), 1, true, false);
 
       UnSubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST, (XSUBJECT *)appwebsocket);
@@ -494,7 +494,7 @@ bool MINIWEBSERVER::AppProc_End()
       delete appwebsocket;
       appwebsocket = NULL;
 
-      stringresult = TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_OK);
+      stringresult = TL(CAMWEB_TRANSLATEID_CAMWEB_OK);
 
       console->PrintMessage(stringresult.Get(), 0, false, true);
       XLOG::GetInstance().AddEntry(XLOGLEVEL_INFO, APPFLOW_CFG_LOG_SECTIONID_ENDING, false, NL("%s: %s") , string.Get(), stringresult.Get());
@@ -514,7 +514,7 @@ bool MINIWEBSERVER::AppProc_End()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::KeyValidSecuences(int key)
+* @fn         bool CAMWEB::KeyValidSecuences(int key)
 * @brief      Processes valid key sequences.
 * @ingroup    EXAMPLES
 *
@@ -523,12 +523,12 @@ bool MINIWEBSERVER::AppProc_End()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::KeyValidSecuences(int key)
+bool CAMWEB::KeyValidSecuences(int key)
 {
   XCHAR character = (XCHAR)key;
 
   if((character<32) || (character>127)) character = _C('?');
-  APPFLOW_LOG_ENTRY(XLOGLEVEL_WARNING, APPFLOW_CFG_LOG_SECTIONID_STATUSAPP, false, TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_KEY_PRESSED_0X), key, character);
+  APPFLOW_LOG_ENTRY(XLOGLEVEL_WARNING, APPFLOW_CFG_LOG_SECTIONID_STATUSAPP, false, TL(CAMWEB_TRANSLATEID_CAMWEB_KEY_PRESSED_0X), key, character);
 
   console->Printf(NL("\r \r"));
 
@@ -545,32 +545,32 @@ bool MINIWEBSERVER::KeyValidSecuences(int key)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::Show_WebServerConfig()
+* @fn         bool CAMWEB::Show_WebServerConfig()
 * @brief      Shows web server configuration.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::Show_WebServerConfig()
+bool CAMWEB::Show_WebServerConfig()
 {
   XSTRING string;
   XSTRING string2;
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_WEB_SERVER));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_WEB_SERVER));
   string2.Empty();
   Show_Line(string, string2);
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PORT));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_PORT));
   string2.Format(NL("%d"), appwebserver->GetWebServer()->GetPort());
   Show_Line(string, string2);
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_AUTHENTICATED_ACCESS));
-  string2.Format(NL("%s"), appwebserver->GetIsAuthenticatedAccess()?TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_YES):TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_NO));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_AUTHENTICATED_ACCESS));
+  string2.Format(NL("%s"), appwebserver->GetIsAuthenticatedAccess()?TL(CAMWEB_TRANSLATEID_CAMWEB_YES):TL(CAMWEB_TRANSLATEID_CAMWEB_NO));
   Show_Line(string, string2);
 
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PLUGIN_S_ACTIVE_S));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_PLUGIN_S_ACTIVE_S));
   XDWORD nplugins = appwebserver->GetWebServer()->GetPluginsManager()->Plugins_GetNPlugins();
   string2.Format(NL("%d "), appwebserver->GetWebServer()->GetPluginsManager()->Plugins_GetNPlugins());
 
@@ -583,8 +583,8 @@ bool MINIWEBSERVER::Show_WebServerConfig()
   Show_Line(string, string2);
 
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ONLY_SERVES_REST_API));
-  string2.Format(NL("%s"), appwebserver->GetIsApiRestOnly()?TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_YES):TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_NO));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_ONLY_SERVES_REST_API));
+  string2.Format(NL("%s"), appwebserver->GetIsApiRestOnly()?TL(CAMWEB_TRANSLATEID_CAMWEB_YES):TL(CAMWEB_TRANSLATEID_CAMWEB_NO));
   Show_Line(string, string2);
 
   return true;
@@ -593,14 +593,14 @@ bool MINIWEBSERVER::Show_WebServerConfig()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::Show_WebSocketConfig()
+* @fn         bool CAMWEB::Show_WebSocketConfig()
 * @brief      Shows web socket configuration.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::Show_WebSocketConfig()
+bool CAMWEB::Show_WebSocketConfig()
 {
   if(!appwebsocket)                   return false;
   if(!appwebsocket->GetWebServer())   return false;
@@ -612,7 +612,7 @@ bool MINIWEBSERVER::Show_WebSocketConfig()
   string2.Empty();
   Show_Line(string, string2);
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PORT));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_PORT));
   string2.Format(NL("%d"), appwebsocket->GetWebServer()->GetPort());
   Show_Line(string, string2);
 
@@ -628,7 +628,7 @@ bool MINIWEBSERVER::Show_WebSocketConfig()
       connection = appwebsocket->GetWebServer()->Websocket_GetNextConnection();
     }
 
-  string.Format(TL(MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ACTIVE_CONNECTIONS));
+  string.Format(TL(CAMWEB_TRANSLATEID_CAMWEB_ACTIVE_CONNECTIONS));
   string2.Format(NL("[%d]"), nconnections_active);
   Show_Line(string, string2);
 
@@ -651,14 +651,14 @@ bool MINIWEBSERVER::Show_WebSocketConfig()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER::Show_AllStatus()
+* @fn         bool CAMWEB::Show_AllStatus()
 * @brief      Shows all status information.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER::Show_AllStatus()
+bool CAMWEB::Show_AllStatus()
 {
   console->Clear();
 
@@ -677,7 +677,7 @@ bool MINIWEBSERVER::Show_AllStatus()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void MINIWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
+* @fn         void CAMWEB::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 * @brief      Handle event web server.
 * @note       INTERNAL
 * @ingroup    EXAMPLES
@@ -687,7 +687,7 @@ bool MINIWEBSERVER::Show_AllStatus()
 * @return     void : Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-void MINIWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
+void CAMWEB::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 {
   if(!event) return;
 
@@ -719,7 +719,7 @@ void MINIWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void MINIWEBSERVER::HandleEvent(XEVENT* xevent)
+* @fn         void CAMWEB::HandleEvent(XEVENT* xevent)
 * @brief      Handles an event.
 * @note       INTERNAL
 * @ingroup    EXAMPLES
@@ -729,7 +729,7 @@ void MINIWEBSERVER::HandleEvent_WebServer(DIOWEBSERVER_XEVENT* event)
 * @return     void : Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-void MINIWEBSERVER::HandleEvent(XEVENT* xevent)
+void CAMWEB::HandleEvent(XEVENT* xevent)
 {
   if(!xevent) return;
 
@@ -747,7 +747,7 @@ void MINIWEBSERVER::HandleEvent(XEVENT* xevent)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void MINIWEBSERVER::Clean()
+* @fn         void CAMWEB::Clean()
 * @brief      Cleans the object internal state.
 * @note       INTERNAL
 * @ingroup    EXAMPLES
@@ -755,7 +755,7 @@ void MINIWEBSERVER::HandleEvent(XEVENT* xevent)
 * @return     void : Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-void MINIWEBSERVER::Clean()
+void CAMWEB::Clean()
 {
   xtimerupdateconsole       = NULL;
 

@@ -1,8 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       MiniWebServer_TranslateID.h
+* @file       CamWeb_CFG.h
 * 
-* @brief      Identifiers of the MiniWebServer translation sentences
+* @class      CAMWEB_CFG
+* @brief      Example CamWeb Configuration class
 * @ingroup    EXAMPLES
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -29,38 +30,48 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-
+#include "APPFlowCFG.h"
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
-enum MINIWEBSERVER_TRANSLATEID
+#define CAMWEB_CFG_SECTION_PROTOCOL                            NL("protocol")
+#define CAMWEB_CFG_PROTOCOL_ISACTIVE                           NL("isactive")
+#define CAMWEB_CFG_PROTOCOL_ISLOCALENUMACTIVE                  NL("islocalenumactive")
+#define CAMWEB_CFG_PROTOCOL_PORT                               NL("port")
+#define CAMWEB_CFG_PROTOCOL_TARGET                             NL("target")
+
+/*---- CLASS ---------------------------------------------------------------------------------------------------------*/
+
+class CAMWEB_CFG : public APPFLOWCFG
 {
-  MINIWEBSERVER_TRANSLATEID_UNKNOWN                                         = 0 ,
+  public:
 
-  MINIWEBSERVER_TRANSLATEID_OK                                                  ,
-  MINIWEBSERVER_TRANSLATEID_SENT                                                ,
 
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_INITIALIZING_WEB_SERVER ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_OK ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ERROR ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_INITIALIZING_WEB_SOCKET ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_GEN_ID ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_APP_ID ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PRESS_A_KEY_TO_CONTINUE ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_DEACTIVATING_WEB_SERVER ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_DEACTIVATING_WEBSOCKET ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_KEY_PRESSED_0X ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_WEB_SERVER ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PORT ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_AUTHENTICATED_ACCESS ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_YES ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_NO ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_PLUGIN_S_ACTIVE_S ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ONLY_SERVES_REST_API ,
-  MINIWEBSERVER_TRANSLATEID_MINIWEBSERVER_ACTIVE_CONNECTIONS ,
-  MINIWEBSERVER_TRANSLATEID_LAST
+    static bool                     GetIsInstanced                          ();
+    static CAMWEB_CFG&       GetInstance                             (bool ini = true);
+    static bool                     DelInstance                             ();
+
+    bool                            DoVariableMapping                       ();
+    bool                            DoDefault                               ();
+
+  private:
+                                    CAMWEB_CFG                       (XCHAR* namefile);
+                                    CAMWEB_CFG                       (CAMWEB_CFG const&);        
+    virtual                        ~CAMWEB_CFG                       ();
+
+    void                            operator =                              (CAMWEB_CFG const&);        
+
+
+    void                            Clean                                   ();
+
+    static CAMWEB_CFG*       instance;
+
 };
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
+
+
+
+

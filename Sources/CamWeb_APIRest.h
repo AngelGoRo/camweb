@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @file       MiniWebServer_APIRest.h
+* @file       CamWeb_APIRest.h
 *
-* @class      MINIWEBSERVER_APIREST
-* @brief      Example Mini Web Server API Rest class
+* @class      CAMWEB_APIREST
+* @brief      Example CamWeb API Rest class
 * @ingroup    EXAMPLES
 *
 * @copyright  EndoraSoft. All rights reserved.
@@ -37,13 +37,13 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class DIOWEBSERVER_XEVENT;
-class MINIWEBSERVER;
+class CAMWEB;
 
-class MINIWEBSERVER_APIREST : public DIOWEBSERVER_APIREST
+class CAMWEB_APIREST : public DIOWEBSERVER_APIREST
 {
   public:
-                                 MINIWEBSERVER_APIREST      (MINIWEBSERVER* miniwebserver);
-    virtual                     ~MINIWEBSERVER_APIREST      ();
+                                 CAMWEB_APIREST      (CAMWEB* camweb);
+    virtual                     ~CAMWEB_APIREST      ();
 
     virtual bool                 ResolveEndPoint            (DIOWEBSERVER_XEVENT* event);
 
@@ -51,7 +51,7 @@ class MINIWEBSERVER_APIREST : public DIOWEBSERVER_APIREST
 
     void                         Clean                      ();
 
-    MINIWEBSERVER*               miniwebserver;
+    CAMWEB*               camweb;
 };
 
 /*---- INLINE FUNCTIONS ----------------------------------------------------------------------------------------------*/

@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       MiniWebServer_CFG.cpp
+* @file       CamWeb_CFG.cpp
 * 
-* @class      MINIWEBSERVER_CFG
-* @brief      Example Mini Web Server Configuration class
+* @class      CAMWEB_CFG
+* @brief      Example CamWeb Configuration class
 * @ingroup    EXAMPLES
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -34,13 +34,13 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "MiniWebServer_CFG.h"
+#include "CamWeb_CFG.h"
 
 #include "XLog.h"
 
 #include "Common_DefaultXTraceCFG.h"
 
-#include "MiniWebServer.h"
+#include "CamWeb.h"
 
 
 
@@ -53,7 +53,7 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-MINIWEBSERVER_CFG* MINIWEBSERVER_CFG::instance = NULL;
+CAMWEB_CFG* CAMWEB_CFG::instance = NULL;
 
 
 
@@ -62,14 +62,14 @@ MINIWEBSERVER_CFG* MINIWEBSERVER_CFG::instance = NULL;
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER_CFG::GetIsInstanced()
+* @fn         bool CAMWEB_CFG::GetIsInstanced()
 * @brief      Checks if the singleton instance is created.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the condition is met; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER_CFG::GetIsInstanced()
+bool CAMWEB_CFG::GetIsInstanced()
 {
   return instance!=NULL;
 }
@@ -77,18 +77,18 @@ bool MINIWEBSERVER_CFG::GetIsInstanced()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER_CFG& MINIWEBSERVER_CFG::GetInstance(bool ini)
+* @fn         CAMWEB_CFG& CAMWEB_CFG::GetInstance(bool ini)
 * @brief      Gets the singleton instance.
 * @ingroup    EXAMPLES
 *
 * @param[in]  ini : true to initialize configuration from file; false to use the current values.
 *
-* @return     MINIWEBSERVER_CFG& : Reference to the requested object.
+* @return     CAMWEB_CFG& : Reference to the requested object.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER_CFG& MINIWEBSERVER_CFG::GetInstance(bool ini)
+CAMWEB_CFG& CAMWEB_CFG::GetInstance(bool ini)
 {
-  if(!instance) instance = GEN_NEW MINIWEBSERVER_CFG(ini?APPLICATION_NAMEFILE:NULL);
+  if(!instance) instance = GEN_NEW CAMWEB_CFG(ini?APPLICATION_NAMEFILE:NULL);
 
   return (*instance);
 }
@@ -96,14 +96,14 @@ MINIWEBSERVER_CFG& MINIWEBSERVER_CFG::GetInstance(bool ini)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER_CFG::DelInstance()
+* @fn         bool CAMWEB_CFG::DelInstance()
 * @brief      Deletes the singleton instance.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER_CFG::DelInstance()
+bool CAMWEB_CFG::DelInstance()
 {
   if(instance)
     {
@@ -119,14 +119,14 @@ bool MINIWEBSERVER_CFG::DelInstance()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER_CFG::DoVariableMapping()
+* @fn         bool CAMWEB_CFG::DoVariableMapping()
 * @brief      Maps configuration variables.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER_CFG::DoVariableMapping()
+bool CAMWEB_CFG::DoVariableMapping()
 {
   if(!APPFLOWCFG::DoVariableMapping())
     {
@@ -139,14 +139,14 @@ bool MINIWEBSERVER_CFG::DoVariableMapping()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER_CFG::DoDefault()
+* @fn         bool CAMWEB_CFG::DoDefault()
 * @brief      Loads default configuration values.
 * @ingroup    EXAMPLES
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER_CFG::DoDefault()
+bool CAMWEB_CFG::DoDefault()
 {
   if(!APPFLOWCFG::DoDefault()) 
     {
@@ -198,7 +198,7 @@ bool MINIWEBSERVER_CFG::DoDefault()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER_CFG::MINIWEBSERVER_CFG(XCHAR* namefile)
+* @fn         CAMWEB_CFG::CAMWEB_CFG(XCHAR* namefile)
 * @brief      Constructor.
 * @ingroup    EXAMPLES
 *
@@ -207,20 +207,20 @@ bool MINIWEBSERVER_CFG::DoDefault()
 * @return     Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER_CFG::MINIWEBSERVER_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
+CAMWEB_CFG::CAMWEB_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 {
   Clean();
 
   if(namefile)
     {
-      Ini<MINIWEBSERVER_CFG>();
+      Ini<CAMWEB_CFG>();
     }
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER_CFG::~MINIWEBSERVER_CFG()
+* @fn         CAMWEB_CFG::~CAMWEB_CFG()
 * @brief      Destructor.
 * @note       VIRTUAL
 * @ingroup    EXAMPLES
@@ -228,7 +228,7 @@ MINIWEBSERVER_CFG::MINIWEBSERVER_CFG(XCHAR* namefile) : APPFLOWCFG(namefile)
 * @return     Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER_CFG::~MINIWEBSERVER_CFG()
+CAMWEB_CFG::~CAMWEB_CFG()
 {
   Clean();
 }
@@ -236,7 +236,7 @@ MINIWEBSERVER_CFG::~MINIWEBSERVER_CFG()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void MINIWEBSERVER_CFG::Clean()
+* @fn         void CAMWEB_CFG::Clean()
 * @brief      Cleans the object internal state.
 * @note       INTERNAL
 * @ingroup    EXAMPLES
@@ -244,7 +244,7 @@ MINIWEBSERVER_CFG::~MINIWEBSERVER_CFG()
 * @return     void : Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-void MINIWEBSERVER_CFG::Clean()
+void CAMWEB_CFG::Clean()
 {
 
 }

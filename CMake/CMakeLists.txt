@@ -1,5 +1,5 @@
 # --------------------------------------------------------------------
-# MiniWebServer : Example of console: Web Server example
+# CamWeb : visor web de las cámaras de casa (basado en el ejemplo MiniWebServer de GEN)
 # GEN FrameWork
 # --------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ set(GEN_DIRECTORY "../../GENFramework")   # GEN vive fuera del proyecto: /home/a
 option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON)
 include("${GEN_DIRECTORY}/Common/CMake/GEN_PreProject.cmake")
 
-project(miniwebserver)
+project(camweb)
 
 # --------------------------------------------------------------------
 # Activate features/Defines
@@ -54,8 +54,8 @@ option(APPFLOW_CFG_WEBSERVER_FEATURE                            "Application Flo
 # --------------------------------------------------------------------
 # Config Application Macro
 
-set(APP_CFG_MINISERVERWEB "-DAPPFLOW_CFG=MINIWEBSERVER_CFG::GetInstance()")
-add_definitions(${APP_CFG_MINISERVERWEB})
+set(APP_CFG_CAMWEB "-DAPPFLOW_CFG=CAMWEB_CFG::GetInstance()")
+add_definitions(${APP_CFG_CAMWEB})
 
 
 # --------------------------------------------------------------------
@@ -74,9 +74,9 @@ list(APPEND GEN_INCLUDES_DIR_LIST ${APP_DIRECTORY_APPLICATION})
 # --------------------------------------------------------------------
 # Source code of the Application
 
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/MiniWebServer.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/MiniWebServer_CFG.cpp")
-list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/MiniWebServer_APIRest.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/CamWeb.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/CamWeb_CFG.cpp")
+list(APPEND GEN_SOURCES_MODULES_LIST "${APP_DIRECTORY_APPLICATION}/CamWeb_APIRest.cpp")
 
 
 # --------------------------------------------------------------------

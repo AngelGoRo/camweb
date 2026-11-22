@@ -1,9 +1,9 @@
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @file       MiniWebServer_APIRest.cpp
+* @file       CamWeb_APIRest.cpp
 * 
-* @class      MINIWEBSERVER_APIREST
-* @brief      Example Mini Web Server API Rest class
+* @class      CAMWEB_APIREST
+* @brief      Example CamWeb API Rest class
 * @ingroup    EXAMPLES
 * 
 * @copyright  EndoraSoft. All rights reserved.
@@ -34,11 +34,11 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include "MiniWebServer_APIRest.h"
+#include "CamWeb_APIRest.h"
 
 #include "DIOWebServer_XEvent.h"
 
-#include "MiniWebServer.h"
+#include "CamWeb.h"
 
 
 
@@ -58,26 +58,26 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER_APIREST::MINIWEBSERVER_APIREST(MINIWEBSERVER* miniwebserver)
+* @fn         CAMWEB_APIREST::CAMWEB_APIREST(CAMWEB* camweb)
 * @brief      Constructor.
 * @ingroup    EXAMPLES
 *
-* @param[in]  miniwebserver : Miniwebserver value used by the operation.
+* @param[in]  camweb : Main CamWeb application instance.
 *
 * @return     Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER_APIREST::MINIWEBSERVER_APIREST(MINIWEBSERVER* miniwebserver)
+CAMWEB_APIREST::CAMWEB_APIREST(CAMWEB* camweb)
 {
   Clean();
 
-  this->miniwebserver = miniwebserver;
+  this->camweb = camweb;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         MINIWEBSERVER_APIREST::~MINIWEBSERVER_APIREST()
+* @fn         CAMWEB_APIREST::~CAMWEB_APIREST()
 * @brief      Destructor.
 * @note       VIRTUAL
 * @ingroup    EXAMPLES
@@ -85,7 +85,7 @@ MINIWEBSERVER_APIREST::MINIWEBSERVER_APIREST(MINIWEBSERVER* miniwebserver)
 * @return     Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-MINIWEBSERVER_APIREST::~MINIWEBSERVER_APIREST()
+CAMWEB_APIREST::~CAMWEB_APIREST()
 {
   Clean();
 }
@@ -93,7 +93,7 @@ MINIWEBSERVER_APIREST::~MINIWEBSERVER_APIREST()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool MINIWEBSERVER_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)
+* @fn         bool CAMWEB_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)
 * @brief      Resolves an API REST endpoint.
 * @ingroup    EXAMPLES
 *
@@ -102,9 +102,9 @@ MINIWEBSERVER_APIREST::~MINIWEBSERVER_APIREST()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-bool MINIWEBSERVER_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)
+bool CAMWEB_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)
 {
-  if(!miniwebserver) return false;
+  if(!camweb) return false;
 
   return false;
 }
@@ -112,7 +112,7 @@ bool MINIWEBSERVER_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void MINIWEBSERVER_APIREST::Clean()
+* @fn         void CAMWEB_APIREST::Clean()
 * @brief      Cleans the object internal state.
 * @note       INTERNAL
 * @ingroup    EXAMPLES
@@ -120,9 +120,9 @@ bool MINIWEBSERVER_APIREST::ResolveEndPoint(DIOWEBSERVER_XEVENT* event)
 * @return     void : Does not return a value.
 *
 *---------------------------------------------------------------------------------------------------------------------*/
-void MINIWEBSERVER_APIREST::Clean()
+void CAMWEB_APIREST::Clean()
 {
-  miniwebserver = NULL;
+  camweb = NULL;
 }
 
 
