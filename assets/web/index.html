@@ -1,55 +1,253 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CamWeb</title>
 
-<html>
-   <head>
-      
-      <script type = "text/javascript">
-         function WebSocketTest() {
-            
-            if ("WebSocket" in window) {
-               
-               
-               // Let us open a web socket
-               var ws = new WebSocket("wss://localhost:17009", "prueba");
-				
-               ws.onopen = function() {
-                  
-                  // Web Socket is connected, send data using send()
-                  ws.send("Message to send ...");
-                  alert("Message is sent");
-                  
+  <style>
+    /* ---- Colores (claro / oscuro) ------------------------------------------------ */
+    :root {
+      --bg:          #f4f5f7;
+      --surface:     #ffffff;
+      --text:        #1d2129;
+      --text-soft:   #5f6673;
+      --wall:        #3a404c;
+      --room:        #e6e9ef;
+      --room-hover:  #cfe3ff;
+      --room-active: #2f7cf6;
+      --accent:      #2f7cf6;
+      --border:      #dde1e7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:          #15181d;
+        --surface:     #1f232a;
+        --text:        #e8eaee;
+        --text-soft:   #9aa1ad;
+        --wall:        #c3c8d1;
+        --room:        #2a2f38;
+        --room-hover:  #233a5c;
+        --room-active: #4b8ff8;
+        --accent:      #4b8ff8;
+        --border:      #333944;
+      }
+    }
 
-                  
-               };
-               
-               ws.onmessage = function(msgevent) {
-                var msg = msgevent.data;
-                alert(msg);
-                // message received, do something
-                alert("Connexion Close...");
-                ws.close();
-               };
-				
-                            			
-               ws.onclose = function() { 
-                  
-                  // websocket is closed.
-                  alert("Connection is closed..."); 
-               };
-            } else {
-              
-               // The browser doesn't support WebSocket
-               alert("WebSocket NOT supported by your Browser!");
-            }
-         }
-      </script>
-		
-   </head>
-   
-   <body>
-      <div id = "sse">
-         <a href = "javascript:WebSocketTest()">Run WebSocket</a>
-      </div>
-      
-   </body>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+    }
+    header h1 { margin: 0; font-size: 1.15rem; font-weight: 600; }
+
+    main { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+    .hint { color: var(--text-soft); font-size: .9rem; margin: 0 0 12px; }
+
+    /* ---- Plano -------------------------------------------------------------------- */
+    #plan { width: 100%; height: auto; display: block; }
+
+    .room {
+      fill: var(--room);
+      stroke: var(--wall);
+      stroke-width: 6;
+      stroke-linejoin: round;
+      cursor: pointer;
+      transition: fill .15s;
+      outline: none;
+    }
+    .room:hover, .room:focus { fill: var(--room-hover); }
+    .room:active             { fill: var(--room-active); }
+
+    .room-label {
+      fill: var(--text);
+      font-size: 22px;
+      font-weight: 600;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;   /* el clic atraviesa el texto y llega a la habitación */
+    }
+
+    /* ---- Vista de habitación ------------------------------------------------------ */
+    .back {
+      border: 0;
+      background: none;
+      color: var(--accent);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 4px 8px 4px 0;
+    }
+
+    .device-list { list-style: none; margin: 0; padding: 0; }
+    .device-list li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--text-soft);
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 32px 16px;
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <button id="back" class="back" hidden>&larr; Plano</button>
+    <h1 id="title">Mi casa</h1>
+  </header>
+
+  <main>
+    <!-- Vista 1: el plano -->
+    <section id="view-plan">
+      <p class="hint">Toca una habitación para ver sus cámaras y dispositivos.</p>
+      <svg id="plan" viewBox="-10 0 590 1460" role="group" aria-label="Plano de la casa"></svg>
+    </section>
+
+    <!-- Vista 2: los dispositivos de una habitación -->
+    <section id="view-room" hidden>
+      <ul id="devices" class="device-list"></ul>
+      <p id="no-devices" class="empty" hidden>Todavía no hay cámaras ni dispositivos en esta habitación.</p>
+    </section>
+  </main>
+
+  <script>
+    /* ==================================================================================
+       DATOS
+       Cada habitación tiene:
+         id       -> identificador corto (se usa en la URL)
+         name     -> nombre que se muestra
+         points   -> esquinas del polígono en el plano (unidades del viewBox del SVG)
+         label    -> dónde se pinta el nombre [x, y, rotación]
+         devices  -> lista de cámaras/dispositivos (de momento vacía)
+
+       Más adelante esta lista vendrá del servidor C++ (API REST) en vez de estar aquí.
+       ================================================================================== */
+    const ROOMS = [
+      { id: "salon",       name: "Salón",
+        points: [[125,50],[342,50],[342,130],[558,130],[558,550],[200,550],[200,460],[125,460]],
+        label: [330, 330, 0],   devices: [] },
+
+      { id: "terraza",     name: "Terraza",
+        points: [[342,10],[558,10],[558,130],[342,130]],
+        label: [450, 70, 0],    devices: [] },
+
+      { id: "dormitorio1", name: "Dormitorio 1",
+        points: [[200,550],[465,550],[465,820],[200,820]],
+        label: [332, 685, 0],   devices: [] },
+
+      { id: "pasillo",     name: "Pasillo",
+        points: [[465,550],[558,550],[558,1020],[465,1020]],
+        label: [511, 785, -90], devices: [] },
+
+      { id: "bano",        name: "Baño",
+        points: [[267,820],[465,820],[465,1020],[267,1020]],
+        label: [366, 920, 0],   devices: [] },
+
+      { id: "cocina",      name: "Cocina",
+        points: [[267,1020],[558,1020],[558,1445],[267,1445]],
+        label: [412, 1232, 0],  devices: [] },
+
+      { id: "dormitorio2", name: "Dormitorio 2",
+        points: [[13,1210],[267,1210],[267,1445],[13,1445]],
+        label: [140, 1327, 0],  devices: [] },
+    ];
+
+    /* ==================================================================================
+       DIBUJAR EL PLANO
+       Creamos un <polygon> y un <text> por habitación dentro del <svg>.
+       ================================================================================== */
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const plan   = document.getElementById("plan");
+
+    function drawPlan() {
+      for (const room of ROOMS) {
+        const poly = document.createElementNS(SVG_NS, "polygon");
+        poly.setAttribute("points", room.points.map(p => p.join(",")).join(" "));
+        poly.setAttribute("class", "room");
+        poly.setAttribute("tabindex", "0");          // navegable con teclado
+        poly.setAttribute("role", "button");
+        poly.setAttribute("aria-label", room.name);
+
+        poly.addEventListener("click", () => openRoom(room.id));
+        poly.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openRoom(room.id); }
+        });
+
+        const [x, y, rot] = room.label;
+        const text = document.createElementNS(SVG_NS, "text");
+        text.setAttribute("x", x);
+        text.setAttribute("y", y);
+        text.setAttribute("class", "room-label");
+        if (rot) text.setAttribute("transform", `rotate(${rot} ${x} ${y})`);
+        text.textContent = room.name;
+
+        plan.append(poly, text);
+      }
+    }
+
+    /* ==================================================================================
+       NAVEGACIÓN
+       Usamos el "hash" de la URL (#/habitacion/salon). Así:
+         - el botón Atrás del navegador/móvil funciona solo,
+         - el servidor C++ no necesita saber nada: siempre sirve este mismo index.html.
+       ================================================================================== */
+    function openRoom(id) { location.hash = "#/habitacion/" + id; }
+
+    function render() {
+      const match = location.hash.match(/^#\/habitacion\/(\w+)$/);
+      const room  = match && ROOMS.find(r => r.id === match[1]);
+
+      document.getElementById("view-plan").hidden = !!room;
+      document.getElementById("view-room").hidden = !room;
+      document.getElementById("back").hidden      = !room;
+      document.getElementById("title").textContent = room ? room.name : "Mi casa";
+
+      if (room) renderDevices(room);
+    }
+
+    function renderDevices(room) {
+      const list = document.getElementById("devices");
+      list.innerHTML = "";
+
+      for (const dev of room.devices) {
+        const li = document.createElement("li");
+        li.textContent = dev.name;
+        list.appendChild(li);
+      }
+
+      document.getElementById("no-devices").hidden = room.devices.length > 0;
+    }
+
+    document.getElementById("back").addEventListener("click", () => { location.hash = ""; });
+    window.addEventListener("hashchange", render);
+
+    drawPlan();
+    render();
+  </script>
+</body>
 </html>
