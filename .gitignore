@@ -1,0 +1,16 @@
+# Salida de compilación (se regenera con cmake)
+CMake/Build/
+CMake/out/
+CMake/.vs/
+compile_commands.json
+
+# Ficheros generados al ejecutar la aplicación
+*.log
+*.zip
+
+# Claves y certificados PROPIOS: nunca al repositorio.
+# (Los certificados de prueba del ejemplo de GEN sí se incluyen porque ya son públicos.)
+*.key
+*.p12
+*.pfx
+assets/certificates/private/
