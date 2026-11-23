@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.16.0)
 # --------------------------------------------------------------------
 # PreProject
 
-set(GEN_DIRECTORY "../../GENFramework")   # GEN vive fuera del proyecto: /home/angel/proyectos/GENFramework 
+set(GEN_DIRECTORY "../../..")   # CamWeb/CMake -> GENFramework (la app vive en GENFramework/Apps/CamWeb)
 
 option(USE_CLANG_COMPILER_FEATURE                               "Use Clang Compiler"                                      ON)
 include("${GEN_DIRECTORY}/Common/CMake/GEN_PreProject.cmake")
