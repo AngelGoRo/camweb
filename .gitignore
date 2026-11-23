@@ -14,3 +14,11 @@ compile_commands.json
 *.p12
 *.pfx
 assets/certificates/private/
+
+# Configuración local con valores reales (credenciales, IPs de casa): nunca al repositorio.
+*.local.ini
+
+# Claves privadas propias en PEM/HEX. Las de ejemplo de GEN ya están versionadas
+# y git las sigue igualmente; esto solo evita añadir por error claves nuevas.
+*_key.pem
+*_priv.hex
