@@ -20,8 +20,15 @@ const TIPOS = {
 };
 
 http.createServer((peticion, respuesta) => {
-  const ruta    = decodeURIComponent(new URL(peticion.url, "http://x").pathname);
-  const fichero = path.join(RAIZ, ruta === "/" ? "index.html" : ruta);
+  let fichero;
+  try {
+    // decodeURIComponent lanza URIError con secuencias mal formadas (p. ej. "%E0%A4%A")
+    const ruta = decodeURIComponent(new URL(peticion.url, "http://x").pathname);
+    if (ruta.includes("\0")) throw new Error("byte nulo");        // fs lo rechaza lanzando
+    fichero = path.join(RAIZ, ruta === "/" ? "index.html" : ruta);
+  } catch (e) {
+    respuesta.writeHead(400); return respuesta.end();
+  }
 
   // Que no se pueda salir de assets/web con "../"
   if (!fichero.startsWith(RAIZ + path.sep)) { respuesta.writeHead(403); return respuesta.end(); }
