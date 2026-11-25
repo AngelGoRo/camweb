@@ -136,10 +136,16 @@ test("navegador antiguo sin MediaQueryList.addEventListener: el plano se dibuja 
   await page.addInitScript(() => {
     Object.defineProperty(MediaQueryList.prototype, "addEventListener", { value: undefined });
   });
+  await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
   await expect(page.locator("#plan polygon.room")).toHaveCount(7);
+
+  // El camino de reserva (addListener) también sigue los cambios del sistema en vivo
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
   await boton(page).click();                                  // el botón sigue funcionando
-  expect(["light", "dark"]).toContain(await tema(page));
+  expect(await tema(page)).toBe("light");
 });
 
 // ---- Maquetación ---------------------------------------------------------------------
