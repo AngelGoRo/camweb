@@ -22,3 +22,8 @@ assets/certificates/private/
 # y git las sigue igualmente; esto solo evita añadir por error claves nuevas.
 *_key.pem
 *_priv.hex
+
+# Tests de la web (Playwright): dependencias e informes generados
+Tests/Web/node_modules/
+Tests/Web/test-results/
+Tests/Web/playwright-report/
