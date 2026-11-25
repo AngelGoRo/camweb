@@ -25,18 +25,24 @@
       font-display: swap;
     }
 
-    /* ---- Colores (claro / oscuro)------------------------------------------------ */
+    /* ---- Colores (claro / oscuro) ------------------------------------------------
+       Tema claro: paleta A1 "Verde azulado" (fondo hueso cálido + acento verde azulado).
+       El tema oscuro de abajo es provisional: sus colores se elegirán más adelante.
+       ------------------------------------------------------------------------------- */
     :root {
-      --bg:          #f4f5f7;
-      --surface:     #ffffff;
-      --text:        #1d2129;
-      --text-soft:   #5f6673;
-      --wall:        #3a404c;
-      --room:        #e6e9ef;
-      --room-hover:  #cfe3ff;
-      --room-active: #2f7cf6;
-      --accent:      #2f7cf6;
-      --border:      #dde1e7;
+      --bg:           #f6f5f1;   /* fondo general, hueso cálido                     */
+      --surface:      #ffffff;   /* tarjetas y cabecera                             */
+      --text:         #1e2329;   /* texto principal                                 */
+      --text-soft:    #5b6470;   /* texto secundario (contraste 5,9:1 sobre blanco) */
+      --wall:         #3f4752;   /* paredes del plano                               */
+      --room:         #ece9e1;   /* habitación en reposo                            */
+      --room-hover:   #d4ece8;   /* habitación al pasar el ratón / con foco         */
+      --room-active:  #0f766e;   /* habitación al pulsarla                          */
+      --accent:       #0f766e;   /* color de marca: enlaces, botones principales    */
+      --accent-hover: #0b5a54;
+      --border:       #e4e1d8;
+      --live:         #b3400b;   /* estado "en directo"                             */
+      --ok:           #15803d;   /* estado "conectado"                              */
 
       --font-ui:     "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       --font-mono:   "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
