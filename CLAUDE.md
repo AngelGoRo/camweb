@@ -48,18 +48,30 @@ Reglas:
   - `Tests/UnitTests/` — app `unittests_camweb` (tests unitarios). La fase `TEST` de `compile.py` ejecuta automáticamente las apps cuyo nombre empieza por `unittests_`.
   - `Tests/Integration/` — app de pruebas de integración (servidor web, API REST, configuración…). Se ejecuta a mano tras compilar.
   - Cada app de tests se registra en `listapp.txt`.
+- Lo que no es C++ se prueba con herramientas propias de su lenguaje, fuera de `listapp.txt` (la fase `TEST` de `compile.py` **no** los ejecuta; hay que lanzarlos a mano):
+  - `Tests/Web/` — tests de la interfaz web (`assets/web`) con **Playwright** en Chromium headless, en pantalla de escritorio y de móvil. Por defecto usan un servidor estático de Node que sirve `assets/web` (no hace falta compilar):
+    ```bash
+    cd Tests/Web && npm install && npx playwright test         # primera vez: npx playwright install chromium
+    CAMWEB_URL=https://127.0.0.1:8080 npx playwright test       # contra el camweb real (integración)
+    ```
+  - `Tests/Hooks/` — tests en Python de los hooks de Claude Code (`.claude/hooks/`):
+    ```bash
+    python3 Tests/Hooks/test_bloquear_commit_en_main.py
+    ```
+  - Ver `docs/decisiones/0002-tests-fuera-de-gen.md`.
 - Los tests **no deben depender de las cámaras reales, de Internet ni de credenciales**: usar datos simulados.
 
 ## 4. Flujo obligatorio antes de cada `git push`
 Seguir estos pasos **en este orden**. Si alguno falla, parar, explicar el problema al usuario y no continuar.
 1. **Compilar** con `./compile.sh INTEL64 DEBUG` (incluye la fase `TEST` de los tests unitarios), y en Android cuando esté configurado.
-2. **Pruebas de integración:** si existen en `Tests/Integration/`, ejecutarlas. Esto va **antes** de la revisión.
-3. **Revisión por subagente:** lanzar un subagente que revise todos los commits pendientes de subir (`git diff origin/main...HEAD`). Debe comprobar:
+2. **Tests fuera de GEN:** ejecutar los de `Tests/Web/` (Playwright) y `Tests/Hooks/` (Python), que `compile.sh` no lanza (sección 3).
+3. **Pruebas de integración:** si existen en `Tests/Integration/`, ejecutarlas. Esto va **antes** de la revisión.
+4. **Revisión por subagente:** lanzar un subagente que revise todos los commits pendientes de subir (`git diff origin/main...HEAD`). Debe comprobar:
    - errores de lógica y casos límite,
    - seguridad y secretos (sección 5),
    - que las funcionalidades nuevas tienen tests,
    - que se cumple este CLAUDE.md.
-4. **Mostrar al usuario** el resultado de las pruebas y de la revisión, y hacer push **solo con su confirmación**.
+5. **Mostrar al usuario** el resultado de las pruebas y de la revisión, y hacer push **solo con su confirmación**.
 
 ## 5. Seguridad y secretos
 - **Nunca** subir al repositorio credenciales de Securitas, contraseñas, tokens, IPs/URLs privadas de casa ni claves o certificados propios.
@@ -69,6 +81,7 @@ Seguir estos pasos **en este orden**. Si alguno falla, parar, explicar el proble
 - Ante la duda sobre si algo es sensible, preguntar al usuario antes de hacer commit.
 
 ## 6. Git
+- **Nunca commit en `main`**: cada cambio va en una rama propia que se sube y se integra con un pull request. Lo vigila el hook `.claude/hooks/bloquear_commit_en_main.py` (ver `docs/decisiones/0001-no-commits-en-main.md`).
 - Commits pequeños, cada uno con un solo propósito, con mensaje en **español**.
 - **No hacer push** si el usuario no lo pide (y siempre pasando por la sección 4).
 - No reescribir la historia de `main` (`push --force`, `rebase` de commits ya subidos).
