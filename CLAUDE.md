@@ -51,7 +51,7 @@ Reglas:
 - Lo que no es C++ se prueba con herramientas propias de su lenguaje, fuera de `listapp.txt` (la fase `TEST` de `compile.py` **no** los ejecuta; hay que lanzarlos a mano):
   - `Tests/Web/` — tests de la interfaz web (`assets/web`) con **Playwright** en Chromium headless, en pantalla de escritorio y de móvil. Por defecto usan un servidor estático de Node que sirve `assets/web` (no hace falta compilar):
     ```bash
-    cd Tests/Web && npm install && npx playwright test         # primera vez: npx playwright install chromium
+    cd Tests/Web && npm ci && npx playwright test              # primera vez: npx playwright install chromium
     CAMWEB_URL=https://127.0.0.1:8080 npx playwright test       # contra el camweb real (integración)
     ```
   - `Tests/Hooks/` — tests en Python de los hooks de Claude Code (`.claude/hooks/`):
