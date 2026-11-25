@@ -11,6 +11,20 @@ Funcionamiento:
     permissionDecision = "deny" y el comando no se ejecuta.
   - Si el mismo comando crea antes una rama (`git checkout -b` / `git switch -c`), se deja
     pasar, porque el commit ya caerá en la rama nueva.
+
+Límites conocidos (es una red de seguridad para Claude, no una barrera de seguridad):
+  - Solo detecta `git commit` explícito. No bloquea alias (`git ci`) ni otras órdenes que
+    también crean commits (`merge`, `cherry-pick`, `revert`, `am`, `rebase`, `pull`).
+  - No detecta opciones globales con espacios o valor separado (`git -C "ruta con
+    espacios" commit`, `git --git-dir /x commit`).
+  - La rama se consulta en el directorio de trabajo de la sesión (`cwd`), no en el
+    repositorio al que apunte el comando (`git -C otra/ruta`, `cd otra && ...`).
+  - Falsos positivos estando en main: cualquier comando cuyo texto contenga "git commit"
+    (un echo, un heredoc...). Son inofensivos: basta con no estar en main.
+  - Si algo falla (JSON inesperado, git no responde, no hay python3) deja pasar el comando
+    ("fail open"), para no bloquear el trabajo por un error del propio hook.
+
+Tests: Tests/Hooks/test_bloquear_commit_en_main.py
 """
 
 import json
