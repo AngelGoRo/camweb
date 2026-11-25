@@ -88,7 +88,13 @@
       position: sticky;
       top: 0;
     }
-    header h1 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+    header h1 {
+      margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em;
+      min-width: 0;                 /* permite que encoja dentro del flex...            */
+      overflow: hidden;             /* ...y que un nombre largo acabe en "…"            */
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     main { max-width: 480px; margin: 0 auto; padding: 16px; }
 
@@ -135,6 +141,7 @@
     /* ---- Botón de tema (claro / oscuro) ------------------------------------------- */
     .theme-toggle {
       margin-left: auto;            /* lo empuja al extremo derecho de la cabecera */
+      flex-shrink: 0;               /* con un título largo, que encoja el título y no el botón */
       display: grid;
       place-items: center;
       width: 44px;
@@ -222,7 +229,8 @@
   <header>
     <button id="back" class="back" hidden>&larr; Plano</button>
     <h1 id="title">Mi casa</h1>
-    <button id="theme-toggle" class="theme-toggle" type="button">
+    <!-- aria-label inicial: el script lo ajusta al tema activo al cargar -->
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro">
       <!-- Luna: se muestra en tema claro (pulsar = pasar a oscuro) -->
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -384,16 +392,25 @@
       updateThemeToggle();
     });
 
-    // Si el usuario nunca ha pulsado el botón, seguimos los cambios del sistema en vivo
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-      if (getSavedTheme()) return;
-      applyTheme(getSystemTheme());
-      updateThemeToggle();
-    });
-
     updateThemeToggle();
     drawPlan();
     render();
+
+    /* Si el usuario nunca ha pulsado el botón, seguimos los cambios del sistema en vivo.
+       Va después de pintar la página y protegido: en navegadores antiguos (Safari < 14,
+       WebView viejos) MediaQueryList solo tiene addListener(), y un error aquí no debe
+       impedir que se dibuje el plano. */
+    function onSystemThemeChange() {
+      if (getSavedTheme()) return;
+      applyTheme(getSystemTheme());
+      updateThemeToggle();
+    }
+
+    try {
+      const systemDark = matchMedia("(prefers-color-scheme: dark)");
+      if (systemDark.addEventListener) systemDark.addEventListener("change", onSystemThemeChange);
+      else                             systemDark.addListener(onSystemThemeChange);
+    } catch (e) { /* sin seguimiento en vivo: el botón sigue funcionando */ }
   </script>
 </body>
 </html>
