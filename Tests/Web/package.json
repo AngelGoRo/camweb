@@ -1,0 +1,11 @@
+{
+  "name": "camweb-tests-web",
+  "private": true,
+  "description": "Tests de la interfaz web de CamWeb (assets/web) con Playwright en Chromium headless",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1"
+  }
+}
